@@ -82,7 +82,15 @@ int main(int argc,char* argv[])
     SetConsoleOutputCP(CP_UTF8);
 
     std::cout << "这个程序用来获取当前目录下的文件名" << std::endl;
-    std::cout << "输出的文件名为:"<< excel_name  <<  std::endl;
+    std::cout << "输出的EXCEL文件名为,回车确认（默认 " << excel_name << "）:";
+
+    std::string temp_str;
+    std::getline(std::cin, temp_str);
+    if (temp_str != "")
+    {
+        excel_name = temp_str + ".csv";
+    }
+
     std::cout << "============" << std::endl;
  
     std::string this_file_name = fs::path(argv[0]).filename().string();
