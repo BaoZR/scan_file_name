@@ -82,7 +82,7 @@ int main(int argc,char* argv[])
     SetConsoleOutputCP(CP_UTF8);
 
     std::cout << "这个程序用来获取当前目录下的文件名" << std::endl;
-    std::cout << "输出的EXCEL文件名为,回车确认（默认 " << excel_name << "）:";
+    std::cout << "输出的EXCEL文件名为,回车确认(默认 " << excel_name << "):";
 
     std::string temp_str;
     std::getline(std::cin, temp_str);
@@ -91,41 +91,43 @@ int main(int argc,char* argv[])
         excel_name = temp_str + ".csv";
     }
 
+    std::string this_excel_path = fs::current_path().string() + "\\" + excel_name;
+    std::string this_exe_path = fs::current_path().string() + "\\" + fs::path(argv[0]).filename().string();
+    
     std::cout << "============" << std::endl;
  
-    std::string this_file_name = fs::path(argv[0]).filename().string();
     
     try
     {
         csvfile csv(excel_name); // throws exceptions!
 
-        for (auto const &dir_entry : fs::directory_iterator{"."})
+        for (auto const &dir_entry : fs::recursive_directory_iterator{ fs::current_path().string() })
         {
             if (!dir_entry.is_directory())
             {
-                std::string GBK_name = dir_entry.path().filename().string();
-                std::string UTF8_name = GBK_to_UTF8(GBK_name);
-                if(UTF8_name == excel_name)
+                std::string GBK_path = dir_entry.path().string();
+                std::string UTF8_path = GBK_to_UTF8(GBK_path);
+                if(UTF8_path == this_excel_path)
                 {
 
-                    std::cout << excel_name.c_str();
+                    std::cout << this_excel_path.c_str();
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);
                     std::cout << " skip" ;
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
                     std::cout<< std::endl;
                     continue;
                 }
-                if(UTF8_name == this_file_name)
+                if(UTF8_path == this_exe_path)
                 {
-                    std::cout << this_file_name.c_str();
+                    std::cout << this_exe_path.c_str();
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);
                     std::cout << " skip" ;
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
                     std::cout<< std::endl;
                     continue;
                 }
-                std::cout << UTF8_name.c_str() << std::endl;
-                csv << (GBK_name.c_str()) <<endrow;
+                std::cout << UTF8_path.c_str() << std::endl;
+                csv << (GBK_path.c_str()) <<endrow;
             }
         }
     }
