@@ -9,19 +9,12 @@ set(CMAKE_CXX_STANDARD 17)
 
 SET(THIS_PROJECT_NAME "scan_file")
 
-
-
-
-
-
-
 set(SOURCE_FILE
 ${CMAKE_CURRENT_SOURCE_DIR}/source/main.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/source/csvfile.h
 ${CMAKE_CURRENT_SOURCE_DIR}/source/iconv.h
 ${CMAKE_CURRENT_SOURCE_DIR}/source/win_iconv.cc
 )
-
 
 add_executable(${THIS_PROJECT_NAME} ${SOURCE_FILE})
 ## target_link_libraries(${THIS_PROJECT_NAME} )
